@@ -1,0 +1,5 @@
+# ignore object files created
+*.o 
+
+config.h
+dwm
