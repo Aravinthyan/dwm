@@ -13,6 +13,7 @@ feh --bg-fill ~/Pictures/wallpaper.jpg
 
 sxhkd ~/.config/sxhkd/sxhkdrc &
 
+connect_to_network.sh &
 dwmblocks &
 
 while true; 
