@@ -1,11 +1,13 @@
 void
 tcl(Monitor * m)
 {
-	/*int x, y, h, w, mw, sw, bdw;*/
-	unsigned int i, n, x, y, h, w, mw, sw, bdw;
+	int x, y, h, w, mw, sw, bdw;
+	unsigned int i, n;
 	Client * c;
 
-	for (n = 0, c = nexttiled(m->clients); c; c = nexttiled(c->next), n++);
+	for (n = 0, c = nexttiled(m->clients); c;
+	        c = nexttiled(c->next), n++);
+
 	if (n == 0)
 		return;
 
@@ -15,10 +17,10 @@ tcl(Monitor * m)
 	sw = (m->ww - mw) / 2;
 	bdw = (2 * c->bw);
 	resize(c,
-	       n < 3 ? m->wx + 2*m->gap->gappx : m->wx + sw + 4*m->gap->gappx, /* start x-coords:left : middle */
-	       m->wy + m->gap->gappx,
-	       n == 1 ? m->ww - bdw - 2*m->gap->gappx : mw - bdw - 7*m->gap->gappx,
-	       m->wh - bdw - m->gap->gappx,
+	       n < 3 ? m->wx : m->wx + sw,
+	       m->wy,
+	       n == 1 ? m->ww - bdw : mw - bdw,
+	       m->wh - bdw,
 	       False);
 
 	if (--n == 0)
@@ -29,9 +31,9 @@ tcl(Monitor * m)
 
 	if (n > 1)
 	{
-		x = m->wx + ((n > 1) ? mw + sw + 0*m->gap->gappx : mw + m->gap->gappx);
-		y = m->wy + m->gap->gappx;
-		h = (m->wh - (n - (n%2))*m->gap->gappx) / (n / 2);
+		x = m->wx + ((n > 1) ? mw + sw : mw);
+		y = m->wy;
+		h = m->wh / (n / 2);
 
 		if (h < bh)
 			h = m->wh;
@@ -41,18 +43,18 @@ tcl(Monitor * m)
 			resize(c,
 			       x,
 			       y,
-			       w - bdw - 2*m->gap->gappx,
+			       w - bdw,
 			       (i + 1 == n / 2) ? m->wy + m->wh - y - bdw : h - bdw,
 			       False);
 
 			if (h != m->wh)
-				y = c->y + HEIGHT(c) + 2*m->gap->gappx;
+				y = c->y + HEIGHT(c);
 		}
 	}
 
-	x = (n + 1 / 2) == 1 ? mw + 0*m->gap->gappx : m->wx + m->gap->gappx;
-	y = m->wy + m->gap->gappx;
-	h = (m->wh - (n - (n%2))*m->gap->gappx) / ((n + 1) / 2);
+	x = (n + 1 / 2) == 1 ? mw : m->wx;
+	y = m->wy;
+	h = m->wh / ((n + 1) / 2);
 
 	if (h < bh)
 		h = m->wh;
@@ -62,11 +64,11 @@ tcl(Monitor * m)
 		resize(c,
 		       x,
 		       y,
-		       w - bdw - 1*m->gap->gappx,   /* width of leftmost column */
+		       (i + 1 == (n + 1) / 2) ? w - bdw : w - bdw,
 		       (i + 1 == (n + 1) / 2) ? m->wy + m->wh - y - bdw : h - bdw,
 		       False);
 
 		if (h != m->wh)
-			y = c->y + HEIGHT(c) + 2*m->gap->gappx;
+			y = c->y + HEIGHT(c);
 	}
 }
